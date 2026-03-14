@@ -1,0 +1,251 @@
+/* ==================== 全局基础样式 ==================== */
+html, body {
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==================== 图片相关样式 ==================== */
+img {
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+.responsive-img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.none {
+  mask-image: linear-gradient(to bottom, black 30%, transparent 50%);
+  -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 50%);
+}
+
+.show {
+}
+
+/* ==================== 按钮公共样式 ==================== */
+.common-btn {
+  z-index: 9999;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ==================== 返回按钮 ==================== */
+#back {
+  position: fixed;
+  left: 40%;
+  top: 20%;
+  transform: translate(-50%, -50%);
+  display: none;
+  pointer-events: auto !important;
+
+  width: 15%;
+  height: 10%;
+  font-size: 2vw;
+
+  background: #f0f0f0;
+  color: #333333;
+}
+
+#back:hover {
+  background: #e0e0e0;
+}
+
+#back:active {
+  transform: translate(-50%, -50%) scale(0.96);
+  background: #d0d0d0;
+}
+
+#download {
+  position: fixed;
+  left: 60%;
+  top: 20%;
+  transform: translate(-50%, -50%);
+  display: none;
+  pointer-events: auto !important;
+
+  width: 15%;
+  height: 10%;
+  font-size: 2vw;
+
+  background: #f0f0f0;
+  color: #333333;
+}
+
+#download:hover {
+  background: #e0e0e0;
+}
+
+#download:active {
+  transform: translate(-50%, -50%) scale(0.96);
+  background: #d0d0d0;
+}
+
+#download_mod {
+  position: fixed;
+  left: 50%;
+  top: 70%;
+  transform: translate(-50%, -50%);
+  display: block;
+  pointer-events: auto !important;
+
+  width: 20%;
+  height: 15%;
+  font-size: 3vw;
+
+  background: #f8d7da;
+  color: #721c24;
+}
+
+#download_mod:hover {
+  background: #f5c6cb;
+}
+
+#download_mod:active {
+  transform: translate(-50%, -50%) scale(0.96);
+  background: #f1b0b7;
+}
+
+#update_log_btn {
+  position: fixed;
+  left: 0%;
+  top: 76%;
+  display: block;
+  pointer-events: auto !important;
+
+  width: 8%;
+  height: 5%;
+  font-size: 1vw;
+
+  background: #f8d7da;
+  color: #721c24;
+}
+
+#update_log_btn:hover {
+  background: #f5c6cb;
+}
+
+#update_log_btn:active {
+  scale(0.96);
+  background: #f1b0b7;
+}
+
+.text-common{
+  z-index: 9999;
+  color: #f5c6cb;
+}
+
+
+
+#title {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%);
+  display: block;
+
+  white-space: nowrap;
+  font-size: 4vw;
+}
+
+#versioninfo {
+  position: fixed;
+  left: 0%;
+  top: 70%;
+  display: block;
+
+  white-space: nowrap;
+  font-size: 2vw;
+}
+
+#disclaimer {
+  position: fixed;
+  left: 50%;
+  bottom: 0%;
+  transform: translate(-50%);
+  display: block;
+
+  white-space: nowrap;
+  font-size: 2vw;
+}
+
+#usage_guide {
+  position: fixed;
+  left: 50%;
+  bottom: 15%;
+  transform: translate(-50%);
+  display: block;
+
+  white-space: nowrap;
+  font-size: 2vw;
+}
+
+#qq_groups {
+  position: fixed;
+  right: 0%;
+  top: 70%;
+  display: block;
+  text-align: right;
+
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+
+  white-space: nowrap;
+  font-size: 2vw;
+}
+
+#feedback_email {
+  position: fixed;
+  right: 0%;
+  top: 85%;
+  display: block;
+
+  color: #d09097;
+
+  cursor: pointer;
+
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+
+  white-space: nowrap;
+  font-size: 2vw;
+}
+
+#original_credit {
+  position: fixed;
+  right: 0%;
+  bottom: 0%;
+  display: block;
+
+  white-space: nowrap;
+  font-size: 1.5vw;
+}
