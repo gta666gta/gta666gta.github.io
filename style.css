@@ -108,7 +108,7 @@ img {
 
 #download_mod {
   position: fixed;
-  left: 50%;
+  left: 39%;
   top: 70%;
   transform: translate(-50%, -50%);
   display: block;
@@ -127,6 +127,31 @@ img {
 }
 
 #download_mod:active {
+  transform: translate(-50%, -50%) scale(0.96);
+  background: #f1b0b7;
+}
+
+#download_mod_code {
+  position: fixed;
+  left: 61%;
+  top: 70%;
+  transform: translate(-50%, -50%);
+  display: block;
+  pointer-events: auto !important;
+
+  width: 20%;
+  height: 15%;
+  font-size: 3vw;
+
+  background: #f8d7da;
+  color: #721c24;
+}
+
+#download_mod_code:hover {
+  background: #f5c6cb;
+}
+
+#download_mod_code:active {
   transform: translate(-50%, -50%) scale(0.96);
   background: #f1b0b7;
 }
@@ -151,7 +176,7 @@ img {
 }
 
 #update_log_btn:active {
-  scale(0.96);
+  transform: scale(0.96);
   background: #f1b0b7;
 }
 
