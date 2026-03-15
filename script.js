@@ -123,10 +123,26 @@ window.onload = function() {
     window.open("https://store.steampowered.com/app/3865150/_/", "myTap");
   };
 
-  // ========== 7. 下载MOD按钮（点击后什么都不做） ==========
-  download_mod.onclick = function() {
-    // 预留位置，暂时不执行任何操作
-  };
+// ========== 7. 下载MOD按钮（点击后下载同目录 syq_mod.exe） ==========
+download_mod.onclick = function() {
+  // 1. 创建一个隐藏的 a 标签
+  const a = document.createElement('a');
+
+  // 2. 指向同目录下的 syq_mod.exe 文件
+  a.href = './syq_mod.exe';
+
+  // 3. 设置下载时显示的文件名
+  a.download = 'syq_mod.exe';
+
+  // 4. 把标签临时加到页面里
+  document.body.appendChild(a);
+
+  // 5. 模拟点击，触发下载
+  a.click();
+
+  // 6. 下载后移除这个临时标签
+  document.body.removeChild(a);
+};
 
   // ========== 8. 更新日志按钮 ==========
   update_log_btn.onclick = function() {
