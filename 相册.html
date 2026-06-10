@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>私人相册 · 密码保护</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a2a3a 0%, #0f1a24 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(30, 40, 50, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            padding: 2rem 1.5rem;
+            width: 100%;
+            max-width: 900px;
+            transition: all 0.3s ease;
+        }
+
+        /* 登录面板 */
+        .login-panel {
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+
+        .login-panel h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f0f3fa, #c0d9ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .login-panel p {
+            color: #cdedff;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .password-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-box input {
+            background: #1e2a36;
+            border: 1px solid #3e5568;
+            padding: 0.9rem 1.2rem;
+            font-size: 1.2rem;
+            width: 200px;
+            border-radius: 3rem;
+            color: white;
+            text-align: center;
+            outline: none;
+            transition: 0.2s;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+
+        .password-box input:focus {
+            border-color: #7aa2f7;
+            box-shadow: 0 0 0 3px rgba(122, 162, 247, 0.3);
+        }
+
+        .password-box button {
+            background: #2f5b7c;
+            border: none;
+            padding: 0.9rem 1.8rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 3rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .password-box button:hover {
+            background: #3f7b9e;
+            transform: scale(0.97);
+        }
+
+        .error-msg {
+            color: #ffb4a2;
+            background: rgba(150, 40, 27, 0.3);
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .tip {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            color: #bdd4e8;
+        }
+
+        /* 相册界面 */
+        .album-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .photo-viewer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        .arrow {
+            background: rgba(20, 30, 40, 0.75);
+            backdrop-filter: blur(4px);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #eef4ff;
+            border: 1px solid rgba(255,255,240,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .arrow:hover {
+            background: #3d6b8c;
+            transform: scale(1.05);
+        }
+
+        .arrow:active {
+            transform: scale(0.95);
+        }
+
+        .image-frame {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 2rem;
+            padding: 1rem;
+            min-height: 400px;
+        }
+
+        #currentImage {
+            max-width: 100%;
+            max-height: 65vh;
+            object-fit: contain;
+            border-radius: 1.8rem;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+            background: #2c3e2f20;
+        }
+
+        .info-bar {
+            margin-top: 0.8rem;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 3rem;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            gap: 1.2rem;
+            color: #dfeef8;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .counter {
+            background: #2c4258;
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+        }
+
+        @media (max-width: 620px) {
+            .arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+            .image-frame {
+                min-height: 280px;
+            }
+            .card {
+                padding: 1.2rem;
+            }
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #7e95ab;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- 登录面板 -->
+        <div id="loginPanel" class="login-panel">
+            <h1>📸 私人相册</h1>
+            <p>输入访问密码 · 解锁回忆</p>
+            <div class="password-box">
+                <input type="password" id="passwordInput" placeholder="密码" maxlength="6" autocomplete="off">
+                <button id="unlockBtn">🔓 进入</button>
+            </div>
+            <div id="loginError" class="error-msg" style="display: none;">⚠️ 密码错误，请重试</div>
+        </div>
+
+        <!-- 相册界面 -->
+        <div id="albumPanel" class="album-container">
+            <div class="photo-viewer">
+                <div class="arrow" id="prevArrow">◀</div>
+                <div class="image-frame">
+                    <img id="currentImage" src="" alt="相册图片">
+                </div>
+                <div class="arrow" id="nextArrow">▶</div>
+            </div>
+            <div class="info-bar">
+                <span>📷 光影之间</span>
+                <span class="counter" id="imageCounter">加载中...</span>
+                <span class="tip">← 键盘左右键 →</span>
+            </div>
+            <footer>✨ 私人珍藏 · 仅供欣赏</footer>
+        </div>
+    </div>
+
+    <script>
+        // ======================= 配置 =======================
+        const SECRET_PASSWORD = "0000";     // 密码
+        const IMAGE_FOLDER = "images/";      // 图片文件夹路径
+        const START_NUM = 1;                 // 起始编号 (1 对应 001)
+        const MAX_TEST = 999;                // 最大探测数量 (防止无限循环)
+        const EXTENSIONS = ["png", "jpg", "jpeg"];  // 支持的扩展名顺序
+
+        // 全局状态
+        let imageList = [];      // 存放检测到的图片 URL
+        let currentIndex = 0;
+        let totalImages = 0;
+        let scanning = true;     // 是否正在扫描
+
+        // DOM 元素
+        const loginPanel = document.getElementById("loginPanel");
+        const albumPanel = document.getElementById("albumPanel");
+        const passwordInput = document.getElementById("passwordInput");
+        const unlockBtn = document.getElementById("unlockBtn");
+        const loginErrorDiv = document.getElementById("loginError");
+        const currentImageEl = document.getElementById("currentImage");
+        const prevArrow = document.getElementById("prevArrow");
+        const nextArrow = document.getElementById("nextArrow");
+        const imageCounterSpan = document.getElementById("imageCounter");
+
+        // 辅助：补零 (数字转三位，如 1 -> "001")
+        function padNumber(num) {
+            return String(num).padStart(3, '0');
+        }
+
+        // 探测图片是否存在 (返回 Promise)
+        function checkImageExists(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+            });
+        }
+
+        // 自动扫描 images 文件夹: 001.png, 001.jpg, 002.png ...
+        async function scanImages() {
+            imageList = [];
+            let num = START_NUM;
+            let foundAny = false;
+
+            while (num <= MAX_TEST) {
+                const numStr = padNumber(num);
+                let found = false;
+
+                // 依次尝试每种扩展名
+                for (const ext of EXTENSIONS) {
+                    const url = `${IMAGE_FOLDER}${numStr}.${ext}`;
+                    const exists = await checkImageExists(url);
+                    if (exists) {
+                        imageList.push(url);
+                        found = true;
+                        foundAny = true;
+                        break; // 找到一种扩展名即可，不再尝试其他
+                    }
+                }
+
+                if (!found) {
+                    // 如果当前编号没找到，且从未找到任何图片，则继续尝试（可能前面缺了某张）
+                    // 但为了逻辑合理：一旦连续缺失，且已经至少找到一张，则停止扫描（避免扫描到空洞中断）
+                    if (foundAny) {
+                        // 已经找到过图片，现在遇到缺失，说明列表结束
+                        break;
+                    }
+                }
+                num++;
+            }
+
+            totalImages = imageList.length;
+            if (totalImages === 0) {
+                imageCounterSpan.innerText = `0 / 0`;
+                currentImageEl.alt = "📭 未检测到图片\n请将图片放入 images/ 文件夹，命名为 001.png, 002.jpg ...";
+                currentImageEl.src = "";
+                console.warn("未检测到任何图片，请检查 images 文件夹及命名规则 (001.png, 002.jpg ...)");
+            } else {
+                // 预加载第一张
+                currentIndex = 0;
+                updatePhoto();
+            }
+            scanning = false;
+        }
+
+        // 更新图片显示
+        function updatePhoto() {
+            if (totalImages === 0) {
+                imageCounterSpan.innerText = `0 / 0`;
+                currentImageEl.alt = "暂无图片";
+                currentImageEl.src = "";
+                return;
+            }
+            let safeIndex = currentIndex % totalImages;
+            if (safeIndex < 0) safeIndex = 0;
+            currentImageEl.src = imageList[safeIndex];
+            currentImageEl.alt = `相册图片 ${safeIndex + 1}`;
+            imageCounterSpan.innerText = `${safeIndex + 1} / ${totalImages}`;
+        }
+
+        function nextPhoto() {
+            if (totalImages === 0) return;
+            currentIndex = (currentIndex + 1) % totalImages;
+            updatePhoto();
+        }
+
+        function prevPhoto() {
+            if (totalImages === 0) return;
+            currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+            updatePhoto();
+        }
+
+        // 登录成功
+        function resetAndShowAlbum() {
+            if (scanning) {
+                // 如果还在扫描，等待一下
+                imageCounterSpan.innerText = "扫描中...";
+                setTimeout(() => {
+                    if (scanning) resetAndShowAlbum();
+                }, 200);
+                return;
+            }
+            loginPanel.style.display = "none";
+            albumPanel.style.display = "flex";
+            if (totalImages > 0) {
+                currentIndex = 0;
+                updatePhoto();
+            } else {
+                currentImageEl.alt = "没有检测到图片，请确保 images/ 文件夹内有 001.png, 002.png ...";
+                imageCounterSpan.innerText = `0 / 0`;
+            }
+        }
+
+        function attemptLogin() {
+            const enteredPwd = passwordInput.value;
+            if (enteredPwd === SECRET_PASSWORD) {
+                loginErrorDiv.style.display = "none";
+                resetAndShowAlbum();
+            } else {
+                loginErrorDiv.style.display = "block";
+                passwordInput.value = "";
+                passwordInput.focus();
+            }
+        }
+
+        // 键盘事件
+        function onGlobalKeydown(e) {
+            if (albumPanel.style.display === "flex") {
+                if (e.key === "ArrowLeft") {
+                    e.preventDefault();
+                    prevPhoto();
+                } else if (e.key === "ArrowRight") {
+                    e.preventDefault();
+                    nextPhoto();
+                }
+            }
+            if (loginPanel.style.display !== "none" && e.key === "Enter") {
+                e.preventDefault();
+                attemptLogin();
+            }
+        }
+
+        // 绑定事件
+        prevArrow.addEventListener("click", () => {
+            if (albumPanel.style.display === "flex") prevPhoto();
+        });
+        nextArrow.addEventListener("click", () => {
+            if (albumPanel.style.display === "flex") nextPhoto();
+        });
+        unlockBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            attemptLogin();
+        });
+        window.addEventListener("keydown", onGlobalKeydown);
+
+        // 页面启动：开始扫描图片，同时显示登录界面
+        window.addEventListener("DOMContentLoaded", async () => {
+            albumPanel.style.display = "none";
+            loginPanel.style.display = "block";
+            loginErrorDiv.style.display = "none";
+            passwordInput.value = "";
+            imageCounterSpan.innerText = "扫描中...";
+            await scanImages();   // 异步扫描，完成后 totalImages 已赋值
+            if (!scanning && totalImages === 0) {
+                // 扫描完毕但没有图片，更新提示
+                imageCounterSpan.innerText = `0 / 0`;
+            }
+        });
+    </script>
+</body>
+</html>
